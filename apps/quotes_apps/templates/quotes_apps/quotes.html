@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Quotes</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/friends.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/favicon" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-sm-8'>
+                <h2>Hello, {{current_user.name}}!</h2>
+            </div>
+            <div class='col-sm-1 col-sm-offset-4'>
+                <h5>
+                    <a href='/logout'>Logout</a>
+                </h5>
+            </div>
+        </div>
+        {% if friends%}
+        <h3>Here is the list of your favorite quotes:</h3>
+        
+        {% endif %}
+        <div class='row'>
+            <div class='col-sm-7' id='friends_table'>
+                <table class='table table-striped table-responsive'>
+                        {% for quotes in quotes %}
+                    <tr>
+                        <th>Alias :</th>
+                        <th>Action :</th>
+                    </tr>
+                   
+                    <tr>
+                        <td><h3>{{quote}}</h3></td>
+                        <td>
+                            <a href='/users/{{friends.id}}'>
+                                <p class='inline'>View Quote</p>
+                            </a>
+                        </td>
+                        <td>
+                            <a href='/users/remove/{{friends.id}}'>
+                                <p class='inline'>Remove Quote</p>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <h3>Other Quotes not on your favorite quote's list:</h3>
+        <div class='row'>
+            <div class='col-sm-7' id='user_table'>
+                <table class='table table-striped table-responsive'>
+                    <tr>
+                        <th>Alias</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for other_user in others %}
+                    <tr>
+                        <td>
+                            <a href='/users/{{other_user.id}}'>{{other_user.name}}</a>
+                        </td>
+                        <td>
+                            <form action='/users/add/{{other_user.id}}' method='post'>
+                                {% csrf_token %}
+                                <input id='add' type='submit' value='Add as Friend'>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
